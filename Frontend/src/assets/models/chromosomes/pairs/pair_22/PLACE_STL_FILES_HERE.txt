@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 22 in this folder.
+Expected filenames:
+- chr22_a.stl
+- chr22_b.stl
+Optional alternatives supported:
+- chromosome_22_a.stl
+- chromosome_22_b.stl

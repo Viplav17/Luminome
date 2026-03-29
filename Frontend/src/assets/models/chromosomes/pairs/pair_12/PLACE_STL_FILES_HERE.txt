@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 12 in this folder.
+Expected filenames:
+- chr12_a.stl
+- chr12_b.stl
+Optional alternatives supported:
+- chromosome_12_a.stl
+- chromosome_12_b.stl

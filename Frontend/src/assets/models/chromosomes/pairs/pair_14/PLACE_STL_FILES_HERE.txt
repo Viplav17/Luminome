@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 14 in this folder.
+Expected filenames:
+- chr14_a.stl
+- chr14_b.stl
+Optional alternatives supported:
+- chromosome_14_a.stl
+- chromosome_14_b.stl

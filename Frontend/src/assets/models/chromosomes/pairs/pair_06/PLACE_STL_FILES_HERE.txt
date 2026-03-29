@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 06 in this folder.
+Expected filenames:
+- chr06_a.stl
+- chr06_b.stl
+Optional alternatives supported:
+- chromosome_06_a.stl
+- chromosome_06_b.stl

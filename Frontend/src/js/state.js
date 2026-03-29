@@ -12,6 +12,7 @@ var S = {
   genes:        [],
   tick:         0,
   mutSite:      null,
+  selChromosome: null,
   uploadChrMap: {},
   sortMode:     'default',
 };

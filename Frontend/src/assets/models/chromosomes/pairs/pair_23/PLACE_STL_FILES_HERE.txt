@@ -1,0 +1,7 @@
+Drop sex chromosome STLs in this folder.
+Expected filenames:
+- chrx.stl
+- chry.stl
+Optional alternatives supported:
+- chromosome_x.stl
+- chromosome_y.stl

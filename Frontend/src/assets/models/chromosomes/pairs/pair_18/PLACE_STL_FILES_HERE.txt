@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 18 in this folder.
+Expected filenames:
+- chr18_a.stl
+- chr18_b.stl
+Optional alternatives supported:
+- chromosome_18_a.stl
+- chromosome_18_b.stl

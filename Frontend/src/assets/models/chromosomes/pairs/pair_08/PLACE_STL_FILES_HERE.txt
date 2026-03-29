@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 08 in this folder.
+Expected filenames:
+- chr08_a.stl
+- chr08_b.stl
+Optional alternatives supported:
+- chromosome_08_a.stl
+- chromosome_08_b.stl

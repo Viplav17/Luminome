@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 01 in this folder.
+Expected filenames:
+- chr01_a.stl
+- chr01_b.stl
+Optional alternatives supported:
+- chromosome_01_a.stl
+- chromosome_01_b.stl

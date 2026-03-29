@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 07 in this folder.
+Expected filenames:
+- chr07_a.stl
+- chr07_b.stl
+Optional alternatives supported:
+- chromosome_07_a.stl
+- chromosome_07_b.stl

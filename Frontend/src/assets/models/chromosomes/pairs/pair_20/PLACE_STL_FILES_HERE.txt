@@ -1,0 +1,7 @@
+Drop chromosome STLs for pair 20 in this folder.
+Expected filenames:
+- chr20_a.stl
+- chr20_b.stl
+Optional alternatives supported:
+- chromosome_20_a.stl
+- chromosome_20_b.stl

@@ -159,6 +159,44 @@ html, body {
 }
 #back-btn:hover { border-color: var(--accent); color: var(--text); }
 
+#next-tasks {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 310px;
+  background: rgba(9, 13, 31, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+  padding: 12px;
+  z-index: 18;
+}
+
+#next-tasks-title {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+#next-task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#next-task-list li {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-dim);
+  background: rgba(15, 20, 40, 0.88);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
 /* ── Info panel ─────────────────────────────────────────────── */
 #info-panel {
   position: absolute;
@@ -404,3 +442,11 @@ html, body {
 }
 #sort-select:focus { border-color: var(--accent); }
 #sort-select option { background: var(--surface-2); }
+
+@media (max-width: 900px) {
+  #next-tasks {
+    width: min(90vw, 340px);
+    right: 8px;
+    top: 60px;
+  }
+}
