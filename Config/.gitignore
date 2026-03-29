@@ -1,0 +1,4 @@
+# ── Dependencies
+venv/
+.venv/
+__pycache__/
