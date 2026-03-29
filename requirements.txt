@@ -15,3 +15,10 @@ python-dotenv==1.0.1
 scikit-learn==1.5.1
 shap==0.45.1
 numpy-stl==3.1.0
+
+lightgbm==4.5.0
+
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+joblib==1.4.2

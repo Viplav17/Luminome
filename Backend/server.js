@@ -25,6 +25,7 @@ app.use('/api/diseases', require('./api/diseases'));
 app.use('/api/drugs',    require('./api/drugs'));
 app.use('/api/trials',   require('./api/trials'));
 app.use('/api/ai',       aiLimit, require('./api/ai'));
+app.use('/api/ml',       require('./api/ml'));
 
 app.get('*', (req, res) =>
   res.sendFile(path.resolve(__dirname, '../Frontend/index.html'))
