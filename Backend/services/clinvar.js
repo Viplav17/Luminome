@@ -5,7 +5,7 @@ async function getVariants(symbol) {
   const key = process.env.NCBI_API_KEY ? `&api_key=${process.env.NCBI_API_KEY}` : '';
   try {
     const s = await axios.get(
-      `${C.CLINVAR}/esearch.fcgi?db=clinvar&term=${symbol}[gene]&retmax=10&retmode=json${key}`
+      `${C.CLINVAR}/esearch.fcgi?db=clinvar&term=${symbol}[gene]&retmax=30&retmode=json${key}`
     );
     const ids = s.data?.esearchresult?.idlist || [];
     if (!ids.length) return [];

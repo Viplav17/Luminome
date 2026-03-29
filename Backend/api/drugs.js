@@ -1,6 +1,14 @@
 const router = require('express').Router();
 const chembl = require('../services/chembl');
 const ot     = require('../services/opentargets');
+
+router.get('/class/:classKey/genes', async (req, res) => {
+  try {
+    const genes = await chembl.getGenesForDrugClass(req.params.classKey);
+    res.json(genes);
+  } catch { res.json([]); }
+});
+
 router.get('/:gene', async (req, res) => {
   try {
     const [a, b] = await Promise.allSettled([

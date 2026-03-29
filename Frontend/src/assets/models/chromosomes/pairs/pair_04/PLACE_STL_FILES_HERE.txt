@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 04 in this folder.
-Expected filenames:
-- chr04_a.stl
-- chr04_b.stl
-Optional alternatives supported:
-- chromosome_04_a.stl
-- chromosome_04_b.stl

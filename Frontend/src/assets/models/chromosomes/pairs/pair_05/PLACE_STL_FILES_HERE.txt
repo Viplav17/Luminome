@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 05 in this folder.
-Expected filenames:
-- chr05_a.stl
-- chr05_b.stl
-Optional alternatives supported:
-- chromosome_05_a.stl
-- chromosome_05_b.stl

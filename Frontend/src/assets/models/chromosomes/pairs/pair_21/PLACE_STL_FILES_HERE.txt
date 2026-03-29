@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 21 in this folder.
-Expected filenames:
-- chr21_a.stl
-- chr21_b.stl
-Optional alternatives supported:
-- chromosome_21_a.stl
-- chromosome_21_b.stl

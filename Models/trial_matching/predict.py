@@ -40,6 +40,18 @@ def _load():
     return _cache['bundle']
 
 
+def _resolve_model(bundle: dict):
+    # Support legacy and current artifact key names.
+    for k in ('pipeline', 'model', 'clf', 'estimator'):
+        m = bundle.get(k)
+        if m is not None and hasattr(m, 'predict_proba'):
+            return m
+    for _, v in bundle.items():
+        if hasattr(v, 'predict_proba'):
+            return v
+    raise KeyError('pipeline')
+
+
 def _build_explanation(feature_vec: list[float], coefs: list[float],
                         names: list[str], threshold: float = 0.1) -> list[str]:
     """
@@ -47,9 +59,14 @@ def _build_explanation(feature_vec: list[float], coefs: list[float],
     based on logistic regression coefficients × feature values.
     Only include features where contribution exceeds threshold.
     """
-    contribs = [c * v for c, v in zip(coefs, feature_vec)]
+    if not coefs:
+        return []
+    lim = min(len(coefs), len(feature_vec), len(names))
+    if lim <= 0:
+        return []
+    contribs = [coefs[i] * feature_vec[i] for i in range(lim)]
     top = sorted(
-        [(names[i], contribs[i]) for i in range(len(names)) if contribs[i] > threshold],
+        [(names[i], contribs[i]) for i in range(lim) if contribs[i] > threshold],
         key=lambda x: -x[1],
     )[:4]
     return [_EXPLANATIONS.get(n, n.replace('_', ' ').capitalize()) for n, _ in top]
@@ -67,7 +84,7 @@ def predict_trial_match(patient_features: dict) -> dict:
     Returns: {'match_probability': float, 'match': bool, 'explanation': [str]}
     """
     bundle = _load()
-    pipe   = bundle['pipeline']
+    pipe   = _resolve_model(bundle)
     coefs  = bundle.get('coefficients', [])
     names  = bundle.get('feature_names', TRIAL_FEATURE_NAMES)
 
@@ -93,7 +110,7 @@ def rank_trials(patient_features_base: dict, trials: list[dict]) -> list[dict]:
     Returns: sorted list with match_probability, match, explanation.
     """
     bundle = _load()
-    pipe   = bundle['pipeline']
+    pipe   = _resolve_model(bundle)
     coefs  = bundle.get('coefficients', [])
     names  = bundle.get('feature_names', TRIAL_FEATURE_NAMES)
 

@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 15 in this folder.
-Expected filenames:
-- chr15_a.stl
-- chr15_b.stl
-Optional alternatives supported:
-- chromosome_15_a.stl
-- chromosome_15_b.stl

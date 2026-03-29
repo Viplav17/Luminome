@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 19 in this folder.
-Expected filenames:
-- chr19_a.stl
-- chr19_b.stl
-Optional alternatives supported:
-- chromosome_19_a.stl
-- chromosome_19_b.stl

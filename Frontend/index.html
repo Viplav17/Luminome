@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MutationMap</title>
+  <title>Luminome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}</script>
   <link rel="stylesheet" href="src/css/styles.css" />
 </head>
 <body>
 
   <!-- ── Header ─────────────────────────────────────────────── -->
   <header id="header">
-    <div id="logo">MutationMap</div>
+    <button id="logo" type="button">Luminome</button>
 
     <div id="search-wrap">
       <input
@@ -24,6 +23,8 @@
         autocomplete="off"
         spellcheck="false"
       />
+      <button id="search-btn" type="button">Search</button>
+      <span id="search-feedback"></span>
     </div>
 
     <div id="upload-wrap">
@@ -31,6 +32,7 @@
       <input id="upload-input" type="file" accept=".csv,.tsv,.txt" />
       <span id="upload-status"></span>
       <button id="upload-clear" aria-label="Clear upload">✕</button>
+      <button id="report-btn" class="hidden" type="button">↓ PDF Report</button>
     </div>
     <div id="header-meta">
       <span id="gene-count">— genes</span>
@@ -46,6 +48,15 @@
     <button class="chip" data-filter="metabolic">Metabolic</button>
     <button class="chip" data-filter="immunological">Immunological</button>
     <button class="chip" data-filter="rare">Rare Disease</button>
+    <select id="drug-class-select" aria-label="Drug class filter">
+      <option value="">Drug class: off</option>
+      <option value="kinase_inhibitor">Kinase inhibitors</option>
+      <option value="monoclonal_antibody">Monoclonal antibodies</option>
+      <option value="hormone_therapy">Hormone therapy</option>
+      <option value="checkpoint_inhibitor">Checkpoint inhibitors</option>
+      <option value="proteasome_inhibitor">Proteasome inhibitors</option>
+      <option value="alkylating_agent">Alkylating agents (DNA repair)</option>
+    </select>
     <select id="sort-select">
       <option value="default">Sort: Default</option>
       <option value="defects">Sort: Defect Count ↓</option>
@@ -59,6 +70,16 @@
     <canvas id="genome-canvas"></canvas>
     <div id="viewer-3d"></div>
     <button id="back-btn" class="hidden">← All Chromosomes</button>
+    <div id="zoom-controls" class="hidden" aria-label="Zoom controls">
+      <button id="zoom-out-btn" title="Zoom out">−</button>
+      <button id="zoom-in-btn" title="Zoom in">+</button>
+    </div>
+    <aside id="pair-dock" class="hidden" aria-label="Chromosome detail services">
+      <h3 id="pair-dock-title">Chromosome detail</h3>
+      <p id="pair-dock-upload" class="pair-dock-muted"></p>
+      <p id="pair-dock-filters" class="pair-dock-muted"></p>
+      <p class="pair-dock-hint">Click a gene to open the detail panel: variants, diseases, presentation, therapies, and trials. Use disease and drug filters above to highlight targets across the genome; use the AI bar for natural-language queries.</p>
+    </aside>
     <aside id="next-tasks" class="hidden" aria-live="polite">
       <h3 id="next-tasks-title">Next Tasks</h3>
       <ul id="next-task-list"></ul>
@@ -74,24 +95,36 @@
       </div>
       <div id="panel-gene-loc"></div>
       <p id="panel-gene-desc"></p>
+      <button id="panel-open-dna" class="hidden">Inspect DNA Defect</button>
+
+      <section class="panel-section" id="section-upload-rows">
+        <h3>Your file (this gene)</h3>
+        <ul id="panel-upload-rows"></ul>
+      </section>
 
       <section class="panel-section" id="section-mutations">
-        <h3>Known Mutations</h3>
+        <h3>Known mutations &amp; variants (ClinVar)</h3>
         <ul id="panel-mutations"></ul>
       </section>
 
       <section class="panel-section" id="section-diseases">
-        <h3>Linked Diseases</h3>
+        <h3>Linked diseases &amp; conditions</h3>
         <ul id="panel-diseases"></ul>
       </section>
 
+      <section class="panel-section" id="section-symptoms">
+        <h3>Presentation &amp; ontology context</h3>
+        <p id="panel-symptoms-note" class="panel-note"></p>
+        <ul id="panel-symptoms"></ul>
+      </section>
+
       <section class="panel-section" id="section-drugs">
-        <h3>Drugs</h3>
+        <h3>Drug targets &amp; approved therapies</h3>
         <ul id="panel-drugs"></ul>
       </section>
 
       <section class="panel-section" id="section-trials">
-        <h3>Clinical Trials</h3>
+        <h3>Active clinical trials</h3>
         <ul id="panel-trials"></ul>
       </section>
     </aside>
@@ -113,6 +146,7 @@
     <p id="ai-explanation"></p>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="/Config/api.config.js"></script>
   <script src="src/js/state.js"></script>
   <script src="src/js/api.js"></script>
@@ -120,7 +154,7 @@
   <script src="src/js/ui.js"></script>
   <script src="src/js/ai.js"></script>
   <script src="src/js/upload.js"></script>
-  <script type="module" src="src/js/viewer.js"></script>
+  <script src="src/js/report.js"></script>
 
 </body>
 </html>

@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 03 in this folder.
-Expected filenames:
-- chr03_a.stl
-- chr03_b.stl
-Optional alternatives supported:
-- chromosome_03_a.stl
-- chromosome_03_b.stl

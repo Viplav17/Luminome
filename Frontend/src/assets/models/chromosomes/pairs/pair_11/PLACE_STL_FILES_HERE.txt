@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 11 in this folder.
-Expected filenames:
-- chr11_a.stl
-- chr11_b.stl
-Optional alternatives supported:
-- chromosome_11_a.stl
-- chromosome_11_b.stl

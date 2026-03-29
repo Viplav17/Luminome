@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 13 in this folder.
-Expected filenames:
-- chr13_a.stl
-- chr13_b.stl
-Optional alternatives supported:
-- chromosome_13_a.stl
-- chromosome_13_b.stl

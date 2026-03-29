@@ -32,4 +32,4 @@ app.get('*', (req, res) =>
 );
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`MutationMap → http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Luminome → http://localhost:${PORT}`));

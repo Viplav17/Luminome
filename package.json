@@ -1,11 +1,12 @@
 {
-  "name": "mutationmap",
+  "name": "luminome",
   "version": "0.1.0",
-  "description": "Interactive atlas of the human genome for researchers and clinicians",
+  "description": "Luminome: interactive atlas of the human genome for researchers and clinicians",
   "main": "Backend/server.js",
   "scripts": {
     "start": "node Backend/server.js",
-    "dev": "node --watch Backend/server.js"
+    "dev": "node --watch Backend/server.js",
+    "preflight": "node Preflight/run-core-tests.mjs"
   },
   "dependencies": {
     "@google/genai": "^1.47.0",

@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 09 in this folder.
-Expected filenames:
-- chr09_a.stl
-- chr09_b.stl
-Optional alternatives supported:
-- chromosome_09_a.stl
-- chromosome_09_b.stl

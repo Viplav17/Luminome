@@ -46,6 +46,12 @@ async function getDrugs(geneId) {
   return apiFetch('/api/drugs/' + encodeURIComponent(geneId));
 }
 
+// Gene symbols targeted by a pharmacologic class (genome highlight)
+async function getDrugClassGenes(classKey) {
+  if (!classKey) return [];
+  return apiFetch('/api/drugs/class/' + encodeURIComponent(classKey) + '/genes');
+}
+
 // Active clinical trials for a specific gene
 async function getTrials(geneId) {
   return apiFetch('/api/trials/' + encodeURIComponent(geneId));
@@ -53,6 +59,9 @@ async function getTrials(geneId) {
 
 // Send a natural language question to the AI via the backend proxy.
 // Returns { genes: ['BRCA1', 'TP53', ...], explanation: '...' }
-async function queryAI(text) {
-  return apiPost('/api/ai/query', { query: text });
+async function queryAI(text, geneUniverse) {
+  return apiPost('/api/ai/query', {
+    query: text,
+    geneUniverse: Array.isArray(geneUniverse) ? geneUniverse : [],
+  });
 }

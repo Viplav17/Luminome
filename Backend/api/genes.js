@@ -32,12 +32,17 @@ router.get('/:id', async (req, res) => {
   const hit = await cache.get(ck);
   if (hit) return res.json(hit);
   try {
-    const { rows } = await pgPool.query(
-      'SELECT * FROM genes WHERE symbol=$1 OR ensg_id=$1', [id]
-    );
-    const row = rows[0];
-    const live = row ? null : await ensembl.lookupGene(id);
-    const ensgId = row ? row.ensg_id : live?.ensgId;
+    let row = null;
+    try {
+      if (pgPool) {
+        const { rows } = await pgPool.query(
+          'SELECT * FROM genes WHERE symbol=$1 OR ensg_id=$1', [id]
+        );
+        row = rows[0] || null;
+      }
+    } catch (_dbErr) { /* DB unavailable — fall through to Ensembl */ }
+    const live = row ? null : await ensembl.lookupGene(id).catch(() => null);
+    const ensgId = row ? row.ensg_id : (live && live.ensgId);
     if (!ensgId && !row) return res.status(404).json({ error: 'Not found' });
     const [dis, drgs, muts, trs] = await Promise.allSettled([
       ot.getDiseaseAssociations(ensgId || ''),
@@ -45,9 +50,14 @@ router.get('/:id', async (req, res) => {
       clinvar.getVariants(id),
       ct.getActiveTrials(id),
     ]).then(r => r.map(x => x.status === 'fulfilled' ? x.value : []));
+    const efoIds = (dis || []).map(d => d.id).filter(Boolean);
+    let symptoms = [];
+    try {
+      symptoms = await ot.getPresentationHintsFromEfoIds(efoIds);
+    } catch (_) { symptoms = []; }
     const gene = row
-      ? { id:row.symbol, chr:row.chr, pos:parseFloat(row.pos_frac), type:row.type, loc:row.loc, desc:row.description, dis, drugs:drgs, muts, trials:trs }
-      : { ...live, dis, drugs:drgs, muts, trials:trs };
+      ? { id:row.symbol, chr:row.chr, pos:parseFloat(row.pos_frac), type:row.type, loc:row.loc, desc:row.description, dis, drugs:drgs, muts, trials:trs, symptoms }
+      : { ...live, dis, drugs:drgs, muts, trials:trs, symptoms };
     await cache.set(ck, gene, 3600);
     res.json(gene);
   } catch (err) { res.status(500).json({ error: err.message }); }

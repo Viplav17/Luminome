@@ -1,7 +1,0 @@
-Drop chromosome STLs for pair 17 in this folder.
-Expected filenames:
-- chr17_a.stl
-- chr17_b.stl
-Optional alternatives supported:
-- chromosome_17_a.stl
-- chromosome_17_b.stl

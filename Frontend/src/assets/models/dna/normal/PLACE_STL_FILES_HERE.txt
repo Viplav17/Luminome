@@ -1,4 +1,0 @@
-Drop normal DNA helix STL files here.
-Recommended names:
-- reference.stl (fallback)
-- x.stl, y.stl, 1a.stl, 1b.stl, ..., 22a.stl, 22b.stl

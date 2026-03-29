@@ -7,7 +7,7 @@ async function getActiveTrials(symbol) {
       params: {
         'query.term':           symbol,
         'filter.overallStatus': 'RECRUITING,ACTIVE_NOT_RECRUITING',
-        pageSize:               10,
+        pageSize:               20,
       }
     });
     return (r.data?.studies || []).map(s => ({
