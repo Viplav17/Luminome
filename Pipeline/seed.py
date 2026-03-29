@@ -29,7 +29,7 @@ from dotenv import load_dotenv
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from Pipeline.etl import ingest_ensembl, ingest_omim, ingest_pharmgkb, normalize
+from Pipeline.etl import ingest_ensembl, ingest_omim, ingest_pharmgkb, ingest_clinvar, normalize
 
 load_dotenv(os.path.join(ROOT, '.env'))
 logging.basicConfig(
@@ -58,6 +58,7 @@ def main():
     parser.add_argument('--skip-omim',      action='store_true', help='Skip OMIM ingestion')
     parser.add_argument('--skip-ensembl',   action='store_true', help='Skip Ensembl ingestion')
     parser.add_argument('--skip-pharmgkb',  action='store_true', help='Skip PharmGKB ingestion')
+    parser.add_argument('--skip-clinvar',   action='store_true', help='Skip ClinVar ingestion')
     parser.add_argument('--only-normalize', action='store_true', help='Run normalization only')
     args = parser.parse_args()
 
@@ -111,9 +112,21 @@ def main():
         else:
             log.info('STEP 4 — OMIM skipped (--skip-omim)')
 
-    # ── Step 5: Normalize ─────────────────────────────────────────────────────
+        # ── Step 5: ClinVar ──────────────────────────────────────────────────
+        if not args.skip_clinvar:
+            log.info('─' * 40)
+            log.info('STEP 5 — ClinVar variant ingestion (Pathogenic/Benign/VUS)')
+            try:
+                n = ingest_clinvar.run()
+                log.info('ClinVar done — %d variants upserted', n)
+            except Exception as e:
+                log.error('ClinVar ingestion failed: %s', e)
+        else:
+            log.info('STEP 5 — ClinVar skipped (--skip-clinvar)')
+
+    # ── Step 6: Normalize ─────────────────────────────────────────────────────
     log.info('─' * 40)
-    log.info('STEP 5 — Normalization')
+    log.info('STEP 6 — Normalization')
     try:
         n = normalize.run()
         log.info('Normalization done — %d category rows written', n)

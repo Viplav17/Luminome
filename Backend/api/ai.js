@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 
 const SYS = 'You are a genomics AI assistant. Given a natural language query about genes, diseases, or drug targets, return ONLY a valid JSON object with this exact structure: {"genes":["GENE1","GENE2"],"explanation":"One sentence describing why these genes match."}. Use standard HGNC gene symbols. Include up to 20 gene symbols. No markdown, no code blocks — only the JSON object.';
 
@@ -13,17 +13,18 @@ router.post('/query', async (req, res) => {
   }
 
   try {
-    const ai    = new GoogleGenerativeAI(key);
-    const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await model.generateContent(SYS + '\n\nQuery: ' + query);
-    const raw    = result.response.text().trim()
+    const ai = new GoogleGenAI({ apiKey: key });
+    const result = await ai.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: [{ role: 'user', parts: [{ text: SYS + '\n\nQuery: ' + query }] }]
+    });
+    const raw = result.text.trim()
       .replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
 
     let parsed;
     try {
       parsed = JSON.parse(raw);
     } catch {
-      // Gemini occasionally wraps output — extract JSON object substring
       const m = raw.match(/\{[\s\S]*\}/);
       if (!m) throw new Error('Gemini returned unparseable response: ' + raw.slice(0, 120));
       parsed = JSON.parse(m[0]);

@@ -41,14 +41,26 @@ CREATE TABLE IF NOT EXISTS gene_disease (
 
 -- ── Pathogenic variants (ClinVar) ─────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS variants (
-    variant_id      TEXT PRIMARY KEY,        -- ClinVar accession e.g. "VCV000012345"
-    gene_symbol     TEXT REFERENCES genes(symbol) ON DELETE CASCADE,
-    name            TEXT,
-    hgvs            TEXT,
-    significance    TEXT,                    -- Pathogenic | Likely pathogenic | etc.
-    condition       TEXT,
-    review_status   TEXT,
-    created_at      TIMESTAMPTZ DEFAULT NOW()
+    variant_id          TEXT PRIMARY KEY,        -- ClinVar accession e.g. "VCV000012345"
+    gene_symbol         TEXT REFERENCES genes(symbol) ON DELETE CASCADE,
+    name                TEXT,
+    hgvs                TEXT,
+    significance        TEXT,                    -- Pathogenic | Likely pathogenic | etc.
+    condition           TEXT,
+    review_status       TEXT,
+    -- ML feature columns (populated by ingest_clinvar.py)
+    allele_frequency    NUMERIC(12,8),           -- gnomAD AF
+    mutation_type       TEXT,                    -- missense | nonsense | frameshift | etc.
+    gene_pli            NUMERIC(6,4),            -- gnomAD pLI per gene
+    conservation_score  NUMERIC(6,4),            -- (1 - oe_mis) * 10, gene-level
+    submission_count    SMALLINT,                -- number of ClinVar SCV submissions
+    splicing_distance   SMALLINT,                -- distance to nearest splice site (bp)
+    domain_overlap      BOOLEAN DEFAULT FALSE,   -- in Pfam/Uniprot domain (VEP)
+    repeat_region       BOOLEAN DEFAULT FALSE,   -- in repeat masker region (VEP)
+    cadd_score          NUMERIC(6,2),            -- CADD Phred score (VEP)
+    af_popmax           NUMERIC(12,8),           -- gnomAD max AF across populations
+    known_functional_impact BOOLEAN DEFAULT FALSE, -- VEP HIGH/MODERATE consequence
+    created_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Drug–target pairs (ChEMBL) ────────────────────────────────────────────────
