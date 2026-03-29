@@ -1,0 +1,18 @@
+# Libraries and dependencies for the project
+# Install with: pip install -r requirements.txt
+
+psycopg2-binary==2.9.9
+
+requests==2.32.3
+
+pandas==2.2.2
+numpy==1.26.4
+
+tqdm==4.66.4
+
+python-dotenv==1.0.1
+
+scikit-learn==1.5.1
+lightgbm==4.4.0
+xgboost==2.0.3
+shap==0.45.1

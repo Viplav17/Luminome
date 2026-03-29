@@ -1,0 +1,27 @@
+# Files that should be ignored by Git (e.g., sensitive information, build artifacts, etc.)
+
+.env
+.env.local
+
+node_modules/
+dist/
+npm-debug.log
+yarn-debug.log
+
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+Models/**/*.pkl
+Models/**/*.joblib
+Models/**/*.bin
+
+Pipeline/data/
+Pipeline/warehouse/*.parquet
+
+.DS_Store
+Thumbs.db
+
+.vscode/settings.json
