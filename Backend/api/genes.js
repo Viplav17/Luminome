@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
   const hit = await cache.get(ck);
   if (hit) return res.json(hit);
   try {
+    if (!pgPool) return res.json([]);
     const params = [], conds = [];
     if (chr)  { params.push(chr);  conds.push(`chr=$${params.length}`); }
     if (type) { params.push(type); conds.push(`type=$${params.length}`); }

@@ -6,29 +6,31 @@
 
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 
-const { Pool } = require('pg');
-const Redis = require('ioredis');
+let pgPool = null;
+try {
+  const { Pool } = require('pg');
+  pgPool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: 10,
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 2_000,
+  });
+  pgPool.on('error', (err) => console.error('[pgPool] Unexpected error:', err.message));
+} catch (e) {
+  console.warn('[pgPool] PostgreSQL not available — running without DB:', e.message);
+}
 
-const pgPool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 10,
-  idleTimeoutMillis: 30_000,
-  connectionTimeoutMillis: 2_000,
-});
-
-pgPool.on('error', (err) => {
-  console.error('[pgPool] Unexpected error:', err.message);
-});
-
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  lazyConnect: true,
-  enableOfflineQueue: false,
-  // Retry 3 times with exponential back-off, then give up (don't block startup)
-  retryStrategy: (times) => (times > 3 ? null : Math.min(times * 200, 1000)),
-});
-
-redis.on('error', (err) => {
-  console.error('[Redis] Connection error:', err.message);
-});
+let redis = null;
+try {
+  const Redis = require('ioredis');
+  redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+    lazyConnect: true,
+    enableOfflineQueue: false,
+    retryStrategy: (times) => (times > 3 ? null : Math.min(times * 200, 1000)),
+  });
+  redis.on('error', (err) => console.error('[Redis] Connection error:', err.message));
+} catch (e) {
+  console.warn('[Redis] Redis not available — running without cache:', e.message);
+}
 
 module.exports = { pgPool, redis };
