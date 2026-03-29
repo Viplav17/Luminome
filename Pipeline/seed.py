@@ -11,6 +11,7 @@ Execution order:
 
 Usage:
     # Full pipeline (all steps)
+    
     python Pipeline/seed.py
 
     # Skip OMIM if no API key
