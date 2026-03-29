@@ -1,0 +1,8 @@
+Place chromosome_pair.stl and dna_strand.stl in this folder.
+
+These files are loaded at runtime by viewer.js via Three.js STLLoader.
+Until they are present, the viewer falls back to procedural 3D geometry.
+
+Expected files:
+  chromosome_pair.stl   — stylized human chromosome pair model
+  dna_strand.stl        — DNA double helix segment

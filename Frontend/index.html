@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MutationMap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}</script>
+  <link rel="stylesheet" href="src/css/styles.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <header id="header">
+    <div id="logo">MutationMap</div>
+
+    <div id="search-wrap">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Search gene… e.g. BRCA1"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <div id="header-meta">
+      <span id="gene-count">— genes</span>
+    </div>
+  </header>
+
+  <!-- ── Filter chips ───────────────────────────────────────── -->
+  <div id="filter-bar">
+    <button class="chip active" data-filter="null">All</button>
+    <button class="chip" data-filter="cancer">Cancer</button>
+    <button class="chip" data-filter="cardiovascular">Cardiovascular</button>
+    <button class="chip" data-filter="neurological">Neurological</button>
+    <button class="chip" data-filter="metabolic">Metabolic</button>
+    <button class="chip" data-filter="immunological">Immunological</button>
+    <button class="chip" data-filter="rare">Rare Disease</button>
+  </div>
+
+  <!-- ── Main layout ────────────────────────────────────────── -->
+  <main id="main">
+
+    <canvas id="genome-canvas"></canvas>
+    <div id="viewer-3d"></div>
+    <button id="back-btn" class="hidden">← All Chromosomes</button>
+
+    <!-- ── Info panel ─────────────────────────────────────── -->
+    <aside id="info-panel" class="hidden">
+      <button id="panel-close">✕</button>
+
+      <div id="panel-gene-header">
+        <span id="panel-gene-name"></span>
+        <span id="panel-gene-type"></span>
+      </div>
+      <div id="panel-gene-loc"></div>
+      <p id="panel-gene-desc"></p>
+
+      <section class="panel-section" id="section-mutations">
+        <h3>Known Mutations</h3>
+        <ul id="panel-mutations"></ul>
+      </section>
+
+      <section class="panel-section" id="section-diseases">
+        <h3>Linked Diseases</h3>
+        <ul id="panel-diseases"></ul>
+      </section>
+
+      <section class="panel-section" id="section-drugs">
+        <h3>Drugs</h3>
+        <ul id="panel-drugs"></ul>
+      </section>
+
+      <section class="panel-section" id="section-trials">
+        <h3>Clinical Trials</h3>
+        <ul id="panel-trials"></ul>
+      </section>
+    </aside>
+
+  </main>
+
+  <!-- ── AI query bar ───────────────────────────────────────── -->
+  <div id="ai-bar">
+    <form id="ai-form">
+      <input
+        id="ai-input"
+        type="text"
+        placeholder="Ask anything… e.g. genes linked to both diabetes and kidney disease"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button type="submit" id="ai-submit">Ask</button>
+    </form>
+    <p id="ai-explanation"></p>
+  </div>
+
+  <script src="/Config/api.config.js"></script>
+  <script src="src/js/state.js"></script>
+  <script src="src/js/api.js"></script>
+  <script src="src/js/renderer.js"></script>
+  <script src="src/js/ui.js"></script>
+  <script src="src/js/ai.js"></script>
+  <script type="module" src="src/js/viewer.js"></script>
+
+</body>
+</html>
