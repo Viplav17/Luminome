@@ -26,6 +26,12 @@
       />
     </div>
 
+    <div id="upload-wrap">
+      <label id="upload-btn" for="upload-input">↑ Upload CSV/TSV</label>
+      <input id="upload-input" type="file" accept=".csv,.tsv,.txt" />
+      <span id="upload-status"></span>
+      <button id="upload-clear" aria-label="Clear upload">✕</button>
+    </div>
     <div id="header-meta">
       <span id="gene-count">— genes</span>
     </div>
@@ -40,6 +46,11 @@
     <button class="chip" data-filter="metabolic">Metabolic</button>
     <button class="chip" data-filter="immunological">Immunological</button>
     <button class="chip" data-filter="rare">Rare Disease</button>
+    <select id="sort-select">
+      <option value="default">Sort: Default</option>
+      <option value="defects">Sort: Defect Count ↓</option>
+      <option value="severity">Sort: Severity ↓</option>
+    </select>
   </div>
 
   <!-- ── Main layout ────────────────────────────────────────── -->
@@ -104,6 +115,7 @@
   <script src="src/js/renderer.js"></script>
   <script src="src/js/ui.js"></script>
   <script src="src/js/ai.js"></script>
+  <script src="src/js/upload.js"></script>
   <script type="module" src="src/js/viewer.js"></script>
 
 </body>

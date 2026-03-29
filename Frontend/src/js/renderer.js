@@ -62,34 +62,79 @@ function visGenes() {
   });
 }
 
+function sortedOrd() {
+  var m = S.uploadChrMap || {};
+  if (S.sortMode === 'default' || !Object.keys(m).length) return CHR_ORD;
+  return CHR_ORD.slice().sort(function(a, b) {
+    var ca = m[a] ? m[a].rows.length : 0, cb = m[b] ? m[b].rows.length : 0;
+    if (S.sortMode === 'severity') {
+      var sa = m[a] ? SEV_RANK[m[a].maxSev] : 0, sb = m[b] ? SEV_RANK[m[b].maxSev] : 0;
+      if (sb !== sa) return sb - sa;
+    }
+    if (cb !== ca) return cb - ca;
+    return CHR_ORD.indexOf(a) - CHR_ORD.indexOf(b);
+  });
+}
+
 function drawGenome() {
   var W = cv.offsetWidth, H = cv.offsetHeight;
   ctx.fillStyle = COL.bg; ctx.fillRect(0, 0, W, H);
   var cw = W/COLS, ch = H/ROWS;
   chrHits = []; geneHits = [];
   var genes = visGenes();
-  CHR_ORD.forEach(function(id, i) {
+  sortedOrd().forEach(function(id, i) {
     var col = i%COLS, row = Math.floor(i/COLS);
     var mx = col*cw + cw*0.5, my = row*ch + ch*0.5;
-    var bh = (CHR_DATA[id].l/MAX_L)*ch*0.62, bw = 14;
-    var bx = mx-bw*0.5, by = my-bh*0.5;
-    chrHits.push({id:id, bx:bx, by:by, bw:bw, bh:bh, mx:mx});
-    drawChr(id, bx, by, bw, bh);
-    ctx.font = '10px JetBrains Mono, monospace';
+    var bw = 16, gap = 8;
+    var isXY = id === 'Y';
+    var bh1 = (CHR_DATA[id].l/MAX_L)*ch*0.78;
+    var bh2 = isXY ? (CHR_DATA['Y'].l/MAX_L)*ch*0.78 : bh1;
+    var left_id  = isXY ? 'X' : id;
+    var right_id = isXY ? 'Y' : id;
+    var bh_left  = isXY ? (CHR_DATA['X'].l/MAX_L)*ch*0.78 : bh1;
+    var bh_ref   = Math.max(bh_left, bh2);
+    var bx1 = mx - bw - gap*0.5, bx2 = mx + gap*0.5;
+    var by1 = my - bh_left*0.5, by2 = my - bh2*0.5;
+    var cx1 = bx1 + bw*0.5, cx2 = bx2 + bw*0.5;
+    var label = id === 'X' ? 'XX' : 'XY';
+    var displayLabel = (id === 'X' || id === 'Y') ? label : id;
+    chrHits.push({id:id, bx:bx1, by:my-bh_ref*0.5, bw:bw*2+gap, bh:bh_ref, mx:mx});
+    if (S.uploadChrMap && S.uploadChrMap[id]) {
+      var ud = S.uploadChrMap[id], gc = SEV_COL[ud.maxSev];
+      ctx.save();
+      ctx.globalAlpha = 0.18; ctx.fillStyle = gc;
+      rr(bx1-9, by1-9, bw*2+gap+18, bh_ref+18, 10); ctx.fill();
+      ctx.globalAlpha = 0.55; ctx.strokeStyle = gc; ctx.lineWidth = 1.2;
+      ctx.stroke(); ctx.restore();
+      var cnt = ud.rows.length, bgy = by1 - 13;
+      ctx.save();
+      ctx.fillStyle = gc;
+      ctx.beginPath(); ctx.arc(mx, bgy, 9, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#060a18';
+      ctx.font = 'bold 8px JetBrains Mono, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(cnt > 99 ? '99+' : String(cnt), mx, bgy);
+      ctx.restore();
+    }
+    drawChr(left_id,  bx1, by1, bw, bh_left);
+    drawChr(right_id, bx2, by2, bw, bh2);
+    ctx.font = '13px JetBrains Mono, monospace';
     ctx.fillStyle = S.hovChr === id ? COL.txt : COL.mut;
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    ctx.fillText(id, mx, by+bh+6);
+    ctx.fillText(displayLabel, mx, my + bh_ref*0.5 + 6);
     genes.filter(function(g){return g.chr===id;}).forEach(function(g) {
-      var gy = by + g.pos*bh;
+      var gy = by1 + g.pos*bh_left;
       var gr = S.hovGene && S.hovGene.id===g.id ? 4 : 2.5;
       var isAI = S.aiGenes.indexOf(g.id) >= 0;
-      if (isAI) {
-        ctx.beginPath(); ctx.arc(mx, gy, gr+5, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(252,211,77,0.15)'; ctx.fill();
-      }
-      ctx.beginPath(); ctx.arc(mx, gy, gr, 0, Math.PI*2);
-      ctx.fillStyle = gClr(g); ctx.fill();
-      geneHits.push({gene:g, cx:mx, cy:gy, r:gr+4});
+      [cx1, cx2].forEach(function(cx) {
+        if (isAI) {
+          ctx.beginPath(); ctx.arc(cx, gy, gr+5, 0, Math.PI*2);
+          ctx.fillStyle = 'rgba(252,211,77,0.15)'; ctx.fill();
+        }
+        ctx.beginPath(); ctx.arc(cx, gy, gr, 0, Math.PI*2);
+        ctx.fillStyle = gClr(g); ctx.fill();
+      });
+      geneHits.push({gene:g, cx:mx, cy:gy, r:bw+gap});
     });
   });
 }

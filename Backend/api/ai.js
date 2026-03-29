@@ -8,13 +8,17 @@ router.post('/query', async (req, res) => {
   if (!query) return res.status(400).json({ error: 'query required' });
   try {
     const ai    = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = ai.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
     const result = await model.generateContent(SYS + '\n\nQuery: ' + query);
     const text   = result.response.text().trim()
       .replace(/^```json\n?/, '').replace(/\n?```$/, '');
     const parsed = JSON.parse(text);
     res.json({ genes: parsed.genes || [], explanation: parsed.explanation || '' });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    const msg = err.message || '';
+    if (msg.includes('429')) return res.status(503).json({ error: 'Rate limit reached — please wait a moment and try again.' });
+    res.status(500).json({ error: msg });
+  }
 });
 
 module.exports = router;

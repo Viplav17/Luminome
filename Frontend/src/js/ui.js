@@ -131,6 +131,10 @@ function loadDetail(id) {
   });
 }
 
+document.getElementById('sort-select').addEventListener('change', function() {
+  S.sortMode = this.value;
+});
+
 getGenes().then(function(genes) {
   S.genes = genes || [];
   document.getElementById('gene-count').textContent = S.genes.length + ' genes';

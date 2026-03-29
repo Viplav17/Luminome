@@ -341,3 +341,66 @@ html, body {
   color: var(--text-muted) !important;
   font-style: italic;
 }
+
+/* ── Upload controls ────────────────────────────────────────── */
+#upload-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#upload-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+  user-select: none;
+}
+#upload-btn:hover { border-color: var(--accent); color: var(--text); }
+
+#upload-input { display: none; }
+
+#upload-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  display: none;
+}
+
+#upload-clear {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+#upload-clear:hover { color: var(--tsg); }
+
+/* ── Sort select ────────────────────────────────────────────── */
+#sort-select {
+  margin-left: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 4px 10px;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+}
+#sort-select:focus { border-color: var(--accent); }
+#sort-select option { background: var(--surface-2); }
